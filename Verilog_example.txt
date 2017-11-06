@@ -1,0 +1,35 @@
+module wave_generator(
+  clk,
+  reset,
+  wave_1
+);
+
+input clk;
+input reset;
+output wave_1;
+
+reg [2:0]counter_r;
+wire [2:0]counter_nxt;
+reg wave_1_r;
+wire wave_1_nxt;
+
+assign counter_nxt = (counter_r == 3'd5) ? 3'd0 : counter_r + 1'b1;
+
+assign wave_1_nxt = (counter_r == 3'd3) | (counter_r == 4'd5) ? ~wave_1_r : wave_1;
+
+assign wave_1 = wave_1_r;
+
+always @(posedge clk)
+ if (reset)
+  begin
+   counter_r <= 3'b0;
+   wave_1_r <= 1'b0;
+  end
+ else
+  begin
+   counter_r <= counter_nxt;
+   wave_1_r <= wave_1_nxt;
+  end
+
+
+endmodule
